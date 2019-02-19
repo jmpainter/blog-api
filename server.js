@@ -1,22 +1,12 @@
 'use strict';
-
 const express = require('express');
-const morgan = require('morgan');
-const postsRouter = require('./routes/posts');
-const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
-
-const { DATABASE_URL, PORT } = require('./config');
-
 const app = express();
-
+const morgan = require('morgan');
+const mongoose = require('mongoose');
 app.use(morgan('common'));
-
-app.use('/blog-posts', postsRouter);
-
-app.use('*', function(req, res) {
-  res.status(404).json({ message: 'Not Found' });
-});
+const postRoute = require('./routes/posts');
+const { DATABASE_URL, PORT } = require('./config');
+app.use('/blog-posts', postRoute);
 
 // closeServer needs access to a server object, but that only
 // gets created when `runServer` runs, so we declare `server` here
