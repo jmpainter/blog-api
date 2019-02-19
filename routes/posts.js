@@ -60,4 +60,32 @@ router.post('/', jsonParser, (req, res) => {
     });
 });
 
+router.put('/:id', jsonParser, (req, res) => {
+  if (req.params.id !== req.body.id) {
+    return res
+      .status(400)
+      .json({ message: 'req.body.id and req.params.id must match' });
+  }
+  const toUpdate = {};
+  const updateFields = ['title', 'author', 'content'];
+  updateFields.forEach(field => {
+    if (field in req.body) {
+      toUpdate[field] = req.body[field];
+    }
+  });
+  console.log(toUpdate);
+  BlogPost.findByIdAndUpdate(req.body.id, { $set: toUpdate }, { new: true })
+    .then(post => {
+      return res.status(200).json({
+        id: post.id,
+        title: post.title,
+        content: post.content
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'Internal server error' });
+    });
+});
+
 module.exports = router;

@@ -22,8 +22,10 @@ const postSchema = mongoose.Schema({
   comments: [commentSchema]
 });
 
-postSchema.pre('find', function() {
+postSchema.pre('find', function(next) {
   this.populate('author');
+  console.log('POPULATED');
+  next();
 });
 
 postSchema.virtual('authorName').get(function() {
