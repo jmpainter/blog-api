@@ -14,7 +14,7 @@ app.use(morgan('common'));
 
 app.use('/blog-posts', postsRouter);
 
-app.use('*', function (req, res) {
+app.use('*', function(req, res) {
   res.status(404).json({ message: 'Not Found' });
 });
 
@@ -30,10 +30,11 @@ function runServer(databaseUrl, port = PORT) {
       if (err) {
         return reject(err);
       }
-      server = app.listen(port, () => {
-        console.log(`Your app is listening on port ${port}`);
-        resolve();
-      })
+      server = app
+        .listen(port, () => {
+          console.log(`Your app is listening on port ${port}`);
+          resolve();
+        })
         .on('error', err => {
           mongoose.disconnect();
           reject(err);
